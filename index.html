@@ -1,129 +1,247 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>OG Clan – Mobile Bot Service</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<style>
-  /* Theme variables – blue accent, silver cards, black background */
-  :root{--p:#3498db;--bg:#0a0a0a;--card:#C0C0C0;}
-  
-  body{
-    font-family:'Segoe UI',sans-serif;
-    background:var(--bg);
-    color:#fff;
-    margin:0;
-    padding:20px;
-    text-align:center;
-  }
-  .c{
-    background:var(--card);
-    padding:20px;
-    border-radius:15px;
-    margin:15px 0;
-    box-shadow:0 4px 15px rgba(0,0,0,.1);
-    color:#000;          /* dark text on silver cards */
-  }
-  h1{color:var(--p);text-transform:uppercase;letter-spacing:2px;}
-  .price{font-size:1.8em;color:var(--p);font-weight:bold;}
-  a.btn{
-    background:var(--p);
-    color:#000;
-    padding:15px 30px;
-    border:none;
-    border-radius:50px;
-    text-decoration:none;
-    font-weight:bold;
-    cursor:pointer;
-  }
-  input{
-    width:90%;
-    padding:15px;
-    margin:10px 0;
-    border-radius:10px;
-    border:1px solid #333;
-    background:#222;
-    color:#fff;
-  }
-  .legal{
-    font-size:.8em;
-    color:#888;
-    margin-top:30px;
-    text-align:left;
-    border-top:1px solid #333;
-    padding:20px;
-  }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OG Clan - Agar.io Bot Keys</title>
+    <!-- Stripe JS SDK -->
+    <script src="https://js.stripe.com/v3/"></script>
+    <style>
+        :root {
+            --primary: #ff4757; /* Agar Red */
+            --dark: #1e272e;
+            --darker: #111518;
+            --text: #f1f2f6;
+            --card-bg: #2f3640;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--darker);
+            color: var(--text);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        header {
+            background-color: var(--dark);
+            width: 100%;
+            padding: 20px 0;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+
+        h1 { margin: 0; color: var(--primary); text-transform: uppercase; letter-spacing: 2px; }
+        p.subtitle { color: #a4b0be; margin-top: 5px; }
+
+        .container {
+            max-width: 1000px;
+            width: 90%;
+            margin: 40px auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 2px solid transparent;
+            position: relative;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.4);
+            border-color: var(--primary);
+        }
+
+        .price { font-size: 2.5em; font-weight: bold; color: var(--primary); margin: 10px 0; }
+        .duration { font-size: 1.2em; color: #dfe4ea; margin-bottom: 20px; }
+        
+        button.buy-btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.1em;
+            border-radius: 50px;
+            cursor: pointer;
+            width: 100%;
+            font-weight: bold;
+            transition: background 0.2s;
+        }
+
+        button.buy-btn:hover { background-color: #ff6b81; }
+
+        /* Modal for Key Display */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: var(--dark);
+            padding: 40px;
+            border-radius: 15px;
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            border: 2px solid var(--primary);
+        }
+
+        .key-box {
+            background: #000;
+            padding: 15px;
+            font-family: monospace;
+            font-size: 1.2em;
+            margin: 20px 0;
+            border-radius: 5px;
+            color: #fff;
+            word-break: break-all;
+        }
+
+        .close-btn {
+            background: transparent;
+            border: 1px solid var(--text);
+            color: var(--text);
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        footer {
+            margin-top: auto;
+            padding: 20px;
+            color: #747d8c;
+            font-size: 0.9em;
+        }
+    </style>
 </head>
 <body>
-<div class="c"><h1>OG Clan</h1><p>Premium Mobile Bots – iOS & Android</p></div>
 
-<!-- Pricing -->
-<div class="c">
-  <h3>Daily Pass</h3>
-  <div class="price">$5.00</div>
-  <p>24 h, 1 device only</p>
-  <a href="https://discord.gg/UYdCaWHks" class="btn">Buy on Discord</a>
-</div>
-<div class="c">
-  <h3>Weekly Pass</h3>
-  <div class="price">$20.00</div>
-  <p>7 days, 1 device only</p>
-  <a href="https://discord.gg/UYdCaWHks" class="btn">Buy on Discord</a>
-</div>
-<div class="c">
-  <h3>Monthly Pass</h3>
-  <div class="price">$35.00</div>
-  <p>30 days, 1 device only</p>
-  <a href="https://discord.gg/UYdCaWHks" class="btn">Buy on Discord</a>
-</div>
-<!-- New 6‑Month Pass -->
-<div class="c">
-  <h3>6‑Month Pass</h3>
-  <div class="price">$70.00</div>
-  <p>180 days, 1 device only</p>
-  <a href="https://discord.gg/UYdCaWHks" class="btn">Buy on Discord</a>
-</div>
-<!-- New 1‑Year Pass -->
-<div class="c">
-  <h3>1‑Year Pass</h3>
-  <div class="price">$150.00</div>
-  <p>365 days, 1 device only</p>
-  <a href="https://discord.gg/UYdCaWHks" class="btn">Buy on Discord</a>
+<header>
+    <h1>OG Clan Bots</h1>
+    <p class="subtitle">Premium Agar.io Bot Keys</p>
+</header>
+
+<div class="container" id="pricing-container">
+    <!-- Cards will be injected here by JavaScript -->
 </div>
 
-<!-- Key Redemption -->
-<div class="c">
-  <h2>Redeem Your Key</h2>
-  <input type="text" id="key" placeholder="Enter your activation key">
-  <button class="btn" onclick="redeem()">Activate Bot</button>
-  <p id="msg"></p>
+<!-- Payment & Key Modal -->
+<div id="paymentModal" class="modal">
+    <div class="modal-content">
+        <h2 id="planName">Processing...</h2>
+        <div id="stripe-element"></div>
+        <div id="key-display" style="display:none;">
+            <p>Your Key:</p>
+            <div class="key-box" id="generatedKey"></div>
+            <button class="close-btn" onclick="closeModal()">Close</button>
+        </div>
+    </div>
 </div>
 
-<!-- Legal -->
-<div class="legal">
-  <h3>Terms of Service & Warranty</h3>
-  <p><strong>No Refunds:</strong> All sales are final. The key is non‑refundable.</p>
-  <p><strong>Liability Waiver:</strong> By using OG Clan, you agree we are not liable for bans, IP issues, or damages from bot usage.</p>
-  <p><strong>Support:</strong> Contact us via Discord: <a href="https://discord.gg/UYdCaWHks" style="color:var(--p)">https://discord.gg/UYdCaWHks</a></p>
-</div>
+<footer>
+    &copy; 2023 OG Clan Server. Powered by Pyto & Stripe.
+</footer>
 
 <script>
-function redeem(){
-  const key=document.getElementById('key').value.trim();
-  const msg=document.getElementById('msg');
-  if(!key){msg.innerHTML="Please enter a key.";return;}
-  fetch('https://api.discordbots.com/verify?key='+encodeURIComponent(key))
-    .then(r=>r.json())
-    .then(d=>{
-      if(d.valid){
-        msg.innerHTML='<span style="color:#3498db">✅ Key accepted! Download your bot <a href="'+d.download+'" target="_blank">here</a>. It expires on '+d.expires+'.</span>';
-      }else{
-        msg.innerHTML='<span style="color:#ff4444">❌ '+d.reason+'</span>';
-      }
-    })
-    .catch(()=>msg.innerHTML='<span style="color:#ff4444">Error verifying key.</span>');
-}
+    // --- CONFIGURATION ---
+    // REPLACE THIS WITH YOUR STRIBE PUBLISHABLE KEY
+    const stripe = Stripe('pk_test_YOUR_STRIPE_KEY_HERE'); 
+    
+    // Pricing Data Structure
+    const plans = [
+        { id: 'daily', name: 'Daily Pass', price: 500, currency: 'usd', duration: '24 Hours' },
+        { id: 'weekly', name: 'Weekly Pass', price: 2000, currency: 'usd', duration: '7 Days' },
+        { id: 'monthly', name: 'Monthly Pass', price: 3500, currency: 'usd', duration: '30 Days' },
+        { id: '6months', name: '6 Month Pass', price: 7000, currency: 'usd', duration: '180 Days' },
+        { id: 'yearly', name: 'Yearly Pass', price: 15000, currency: 'usd', duration: '365 Days' }
+    ];
+
+    // --- RENDER PRICING CARDS ---
+    const container = document.getElementById('pricing-container');
+    
+    plans.forEach(plan => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `
+            <h3>${plan.name}</h3>
+            <div class="price">$${plan.price / 100}</div>
+            <div class="duration">Valid for ${plan.duration}</div>
+            <button class="buy-btn" onclick="purchase('${plan.id}')">Buy Now</button>
+        `;
+        container.appendChild(card);
+    });
+
+    // --- KEY GENERATION LOGIC ---
+    function generateKey(planId) {
+        const timestamp = Date.now();
+        const randomCode = Math.random().toString(36).substr(2, 9).toUpperCase();
+        return `AGAR-${planId.toUpperCase()}-${randomCode}-${timestamp}`;
+    }
+
+    // --- PAYMENT FLOW ---
+    async function purchase(planId) {
+        const plan = plans.find(p => p.id === planId);
+        const modal = document.getElementById('paymentModal');
+        const keyDisplay = document.getElementById('key-display');
+        const stripeElement = document.getElementById('stripe-element');
+        
+        // Reset UI
+        modal.style.display = 'flex';
+        keyDisplay.style.display = 'none';
+        stripeElement.innerHTML = ''; 
+        document.getElementById('planName').innerText = `Purchasing ${plan.name}`;
+
+        // Create a Checkout Session (In a real app, this calls your backend)
+        // For this static site demo, we will simulate Stripe success after 2 seconds
+        // because creating a real session requires a server.
+        
+        // SIMULATED PAYMENT SUCCESS FOR DEMO PURPOSES:
+        setTimeout(() => {
+            const key = generateKey(planId);
+            
+            // Save to Local Storage so it persists if they refresh
+            let purchasedKeys = JSON.parse(localStorage.getItem('og_clan_keys') || '[]');
+            purchasedKeys.push({
+                plan: plan.name,
+                key: key,
+                date: new Date().toISOString()
+            });
+            localStorage.setItem('og_clan_keys', JSON.stringify(purchasedKeys));
+
+            // Show Key
+            document.getElementById('generatedKey').innerText = key;
+            stripeElement.innerHTML = '<p style="color:#2ecc71">Payment Successful!</p>';
+            keyDisplay.style.display = 'block';
+        }, 2000);
+    }
+
+    function closeModal() {
+        document.getElementById('paymentModal').style.display = 'none';
+    }
+
+    // Close modal if clicking outside
+    window.onclick = function(event) {
+        const modal = document.getElementById('paymentModal');
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
 </script>
+
 </body>
 </html>
